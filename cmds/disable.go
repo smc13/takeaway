@@ -93,7 +93,7 @@ func showMenu(services map[string]string) string {
 	survey.AskOne(&survey.Select{
 		Message: "Select services to disable:",
 		Options: options,
-	}, &selected, survey.WithPageSize(10), SelectIcons)
+	}, &selected, survey.WithPageSize(20), SelectIcons)
 
 	return selected
 }
