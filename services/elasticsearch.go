@@ -7,27 +7,27 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 )
 
-type RedisService struct{}
+type ElasticSearchService struct{}
 
-func (s *RedisService) GetName() string {
-	return "Redis"
+func (s *ElasticSearchService) GetName() string {
+	return "Elasticsearch"
 }
 
-func (s *RedisService) GetDefaultPort() int {
-	return 6379
+func (s *ElasticSearchService) GetDefaultPort() int {
+	return 9200
 }
 
-func (s *RedisService) GetOrganization() string {
-	return ""
+func (s *ElasticSearchService) GetOrganization() string {
+	return "docker.elastic.co"
 }
 
-func (s *RedisService) GetImageName() string {
-	return "redis"
+func (s *ElasticSearchService) GetImageName() string {
+	return "elasticsearch/elasticsearch"
 }
 
-func (s *RedisService) GetDefaults() map[string]string {
+func (s *ElasticSearchService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "redis_data",
+		"volume": "elastic_data",
 	}
 
 	// merge base defaults with service defaults
@@ -38,7 +38,7 @@ func (s *RedisService) GetDefaults() map[string]string {
 	return values
 }
 
-func (s *RedisService) Prompt() (map[string]string, error) {
+func (s *ElasticSearchService) Prompt() (map[string]string, error) {
 	defaults := s.GetDefaults()
 
 	prompts := []*survey.Question{
@@ -47,7 +47,7 @@ func (s *RedisService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What is the Docker volume name?", Default: defaults["volume"]},
 			Validate: survey.Required,
 		},
-	}
+}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 
@@ -66,9 +66,10 @@ func (s *RedisService) Prompt() (map[string]string, error) {
 	return mapped, nil
 }
 
-func (s *RedisService) GetDockerCommandArgs(options map[string]string) []string {
+func (s *ElasticSearchService) GetDockerCommandArgs(options map[string]string) []string {
 	return []string{
-		fmt.Sprintf("--publish=%s:6379", options["port"]),
-		fmt.Sprintf("--volume=%s:/data", options["volume"]),
+		fmt.Sprintf("--publish=%s:9200", options["port"]),
+		fmt.Sprintf("--volume=%s:/usr/share/elasticsearch/data", options["volume"]),
+		"--env=discovery.type=single-node",
 	}
 }

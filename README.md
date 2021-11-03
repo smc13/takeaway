@@ -22,28 +22,29 @@ I also just wanted to test my Golang knowledge with a project I was familiar wit
 # Implemented Services
 
 - [x] Beanstalkd
-- [ ] Category
-- [ ] ClickHouse
-- [ ] CouchDB
-- [ ] DynamoDB
-- [ ] ElasticSearch
-- [ ] EventStoreDB
+- [x] ClickHouse
+- [x] CouchDB
+- [x] DynamoDB
+- [x] ElasticSearch
+- [x] EventStoreDB
 - [x] Expose
-- [ ] InfluxDB
-- [ ] MailDev
-- [ ] MailHog
-- [ ] MariaDb
-- [ ] MeiliSearch
-- [ ] Memcached
-- [ ] Minio
-- [ ] Mongo
-- [ ] MsSql
-- [ ] MySql
-- [ ] Neo4j
-- [ ] PostGIS
+- [x] InfluxDB
+- [x] MailDev
+- [x] MailHog
+- [x] MariaDb
+- [x] MeiliSearch
+- [x] Memcached
+- [x] Minio
+- [x] Mongo
+- [x] MsSql
+- [x] MySql
+- [x] Neo4j
+- [x] PostGIS
 - [x] PostgreSql
-- [ ] RabbitMQ
+- [x] RabbitMQ
 - [x] Redis
-- [ ] Sftp
-- [ ] SingleStore
-- [ ] Sqs
+- [x] Sftp
+- [x] SingleStore
+- [x] Sqs
+
+Not all services have been tested

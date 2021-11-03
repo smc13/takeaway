@@ -7,29 +7,29 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 )
 
-type RedisService struct{}
+type Neo4jService struct{}
 
-func (s *RedisService) GetName() string {
-	return "Redis"
+func (s *Neo4jService) GetName() string {
+	return "Neo4j"
 }
 
-func (s *RedisService) GetDefaultPort() int {
-	return 6379
+func (s *Neo4jService) GetDefaultPort() int {
+	return 7474
 }
 
-func (s *RedisService) GetOrganization() string {
+func (s *Neo4jService) GetOrganization() string {
 	return ""
 }
 
-func (s *RedisService) GetImageName() string {
-	return "redis"
+func (s *Neo4jService) GetImageName() string {
+	return "neo4j"
 }
 
-func (s *RedisService) GetDefaults() map[string]string {
+func (s *Neo4jService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "redis_data",
+		"volume": "neo4j_data",
+		"bolt_access_port": "7687",
 	}
-
 	// merge base defaults with service defaults
 	for key, value := range DefaultOptions() {
 		values[key] = value
@@ -38,13 +38,18 @@ func (s *RedisService) GetDefaults() map[string]string {
 	return values
 }
 
-func (s *RedisService) Prompt() (map[string]string, error) {
+func (s *Neo4jService) Prompt() (map[string]string, error) {
 	defaults := s.GetDefaults()
 
 	prompts := []*survey.Question{
 		{
 			Name:     "volume",
 			Prompt:   &survey.Input{Message: "What is the Docker volume name?", Default: defaults["volume"]},
+			Validate: survey.Required,
+		},
+		{
+			Name:     "bolt_access_port",
+			Prompt:   &survey.Input{Message: "What will the Bolt access port be?", Default: defaults["bolt_access_port"]},
 			Validate: survey.Required,
 		},
 	}
@@ -66,9 +71,12 @@ func (s *RedisService) Prompt() (map[string]string, error) {
 	return mapped, nil
 }
 
-func (s *RedisService) GetDockerCommandArgs(options map[string]string) []string {
+func (s *Neo4jService) GetDockerCommandArgs(options map[string]string) []string {
 	return []string{
-		fmt.Sprintf("--publish=%s:6379", options["port"]),
+		fmt.Sprintf("--publish=%s:7474", options["port"]),
 		fmt.Sprintf("--volume=%s:/data", options["volume"]),
+		fmt.Sprintf("--publish=%s:7687", options["bolt_access_port"]),
+		"--env=NEO4J_AUTH=none",
+		"--env=NEO4J_ACCEPT_LICENSE_AGREEMENT=yes",
 	}
 }

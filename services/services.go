@@ -10,10 +10,31 @@ import (
 )
 
 var services = []Service{
-	&ExposeService{},
-	&PostgresService{},
-	&RedisService{},
 	&BeanstalkdService{},
+	&ClickHouseService{},
+	&CouchDbService{},
+	&DynamoDBService{},
+	&ElasticSearchService{},
+	&EventStoreDbService{},
+	&ExposeService{},
+	&InfluxDBService{},
+	&MailDevService{},
+	&MailHogService{},
+	&MariaDBService{},
+	&MeiliSearchService{},
+	&MemcachedService{},
+	&MinioService{},
+	&MongoService{},
+	&MsSqlService{},
+	&MySqlService{},
+	&Neo4jService{},
+	&PostGisService{},
+	&PostgresService{},
+	&RabbitMqService{},
+	&RedisService{},
+	&SftpService{},
+	&SingleStoreService{},
+	&SqsService{},
 }
 
 // Get all available services
@@ -92,7 +113,7 @@ func EnableService(service Service, useDefaults bool) {
 
 	args := append([]string{fmt.Sprintf("--name=%s", getContainerName(service.GetName(), tag, options["port"]))}, docker.GetNetworkSettings(alias, service.GetImageName())...)
 	args = append(args, dockerTemplate...)
-	args = append(args, fmt.Sprintf("%s/%s:%s", service.GetOrganization(), service.GetImageName(), tag))
+	args = append(args, buildImageName(service, tag))
 
 	err = docker.CreateContainer(args)
 	if err != nil {
@@ -106,6 +127,15 @@ func EnableService(service Service, useDefaults bool) {
 // Generate a container name based on the service name, tag & port
 func getContainerName(serviceName string, tag string, port string) string {
 	return fmt.Sprintf("TO--%s--%s--%s", strings.ToLower(serviceName), tag, port)
+}
+
+func buildImageName(service Service, tag string) string {
+	organization := service.GetOrganization()
+	if organization == "" {
+		organization = "library"
+	}
+
+	return fmt.Sprintf("%s/%s:%s", organization, service.GetImageName(), tag)
 }
 
 // Generate an alias based on the service name & tag

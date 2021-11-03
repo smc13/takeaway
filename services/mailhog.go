@@ -7,27 +7,27 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 )
 
-type RedisService struct{}
+type MailHogService struct{}
 
-func (s *RedisService) GetName() string {
-	return "Redis"
+func (s *MailHogService) GetName() string {
+	return "MailHog"
 }
 
-func (s *RedisService) GetDefaultPort() int {
-	return 6379
+func (s *MailHogService) GetDefaultPort() int {
+	return 1025
 }
 
-func (s *RedisService) GetOrganization() string {
-	return ""
+func (s *MailHogService) GetOrganization() string {
+	return "mailhog"
 }
 
-func (s *RedisService) GetImageName() string {
-	return "redis"
+func (s *MailHogService) GetImageName() string {
+	return "mailhog"
 }
 
-func (s *RedisService) GetDefaults() map[string]string {
+func (s *MailHogService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "redis_data",
+		"web_port": "8025",
 	}
 
 	// merge base defaults with service defaults
@@ -38,13 +38,13 @@ func (s *RedisService) GetDefaults() map[string]string {
 	return values
 }
 
-func (s *RedisService) Prompt() (map[string]string, error) {
+func (s *MailHogService) Prompt() (map[string]string, error) {
 	defaults := s.GetDefaults()
 
 	prompts := []*survey.Question{
 		{
-			Name:     "volume",
-			Prompt:   &survey.Input{Message: "What is the Docker volume name?", Default: defaults["volume"]},
+			Name:     "web_port",
+			Prompt:   &survey.Input{Message: "What will the web port be?", Default: defaults["web_port"]},
 			Validate: survey.Required,
 		},
 	}
@@ -66,9 +66,9 @@ func (s *RedisService) Prompt() (map[string]string, error) {
 	return mapped, nil
 }
 
-func (s *RedisService) GetDockerCommandArgs(options map[string]string) []string {
+func (s *MailHogService) GetDockerCommandArgs(options map[string]string) []string {
 	return []string{
-		fmt.Sprintf("--publish=%s:6379", options["port"]),
-		fmt.Sprintf("--volume=%s:/data", options["volume"]),
+		fmt.Sprintf("--publish=%s:1025", options["port"]),
+		fmt.Sprintf("--publish=%s:8025", options["port"]),
 	}
 }

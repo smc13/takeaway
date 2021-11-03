@@ -7,27 +7,27 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 )
 
-type RedisService struct{}
+type MeiliSearchService struct{}
 
-func (s *RedisService) GetName() string {
-	return "Redis"
+func (s *MeiliSearchService) GetName() string {
+	return "MeiliSearch"
 }
 
-func (s *RedisService) GetDefaultPort() int {
-	return 6379
+func (s *MeiliSearchService) GetDefaultPort() int {
+	return 7700
 }
 
-func (s *RedisService) GetOrganization() string {
-	return ""
+func (s *MeiliSearchService) GetOrganization() string {
+	return "getmeili"
 }
 
-func (s *RedisService) GetImageName() string {
-	return "redis"
+func (s *MeiliSearchService) GetImageName() string {
+	return "meilisearch"
 }
 
-func (s *RedisService) GetDefaults() map[string]string {
+func (s *MeiliSearchService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "redis_data",
+		"volume": "meili_data",
 	}
 
 	// merge base defaults with service defaults
@@ -38,7 +38,7 @@ func (s *RedisService) GetDefaults() map[string]string {
 	return values
 }
 
-func (s *RedisService) Prompt() (map[string]string, error) {
+func (s *MeiliSearchService) Prompt() (map[string]string, error) {
 	defaults := s.GetDefaults()
 
 	prompts := []*survey.Question{
@@ -66,9 +66,9 @@ func (s *RedisService) Prompt() (map[string]string, error) {
 	return mapped, nil
 }
 
-func (s *RedisService) GetDockerCommandArgs(options map[string]string) []string {
+func (s *MeiliSearchService) GetDockerCommandArgs(options map[string]string) []string {
 	return []string{
-		fmt.Sprintf("--publish=%s:6379", options["port"]),
-		fmt.Sprintf("--volume=%s:/data", options["volume"]),
+		fmt.Sprintf("--publish=%s:7700", options["port"]),
+		fmt.Sprintf("--volume=%s:/data.ms", options["volume"]),
 	}
 }

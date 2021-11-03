@@ -7,29 +7,28 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 )
 
-type RedisService struct{}
+type DynamoDBService struct{}
 
-func (s *RedisService) GetName() string {
-	return "Redis"
+func (s *DynamoDBService) GetName() string {
+	return "DynamoDB"
 }
 
-func (s *RedisService) GetDefaultPort() int {
-	return 6379
+func (s *DynamoDBService) GetDefaultPort() int {
+	return 8000
 }
 
-func (s *RedisService) GetOrganization() string {
-	return ""
+func (s *DynamoDBService) GetOrganization() string {
+	return "amazon"
 }
 
-func (s *RedisService) GetImageName() string {
-	return "redis"
+func (s *DynamoDBService) GetImageName() string {
+	return "dynamodb-local"
 }
 
-func (s *RedisService) GetDefaults() map[string]string {
+func (s *DynamoDBService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "redis_data",
+		"volume": "dynamodb_data",
 	}
-
 	// merge base defaults with service defaults
 	for key, value := range DefaultOptions() {
 		values[key] = value
@@ -38,7 +37,7 @@ func (s *RedisService) GetDefaults() map[string]string {
 	return values
 }
 
-func (s *RedisService) Prompt() (map[string]string, error) {
+func (s *DynamoDBService) Prompt() (map[string]string, error) {
 	defaults := s.GetDefaults()
 
 	prompts := []*survey.Question{
@@ -47,7 +46,7 @@ func (s *RedisService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What is the Docker volume name?", Default: defaults["volume"]},
 			Validate: survey.Required,
 		},
-	}
+}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 
@@ -66,9 +65,11 @@ func (s *RedisService) Prompt() (map[string]string, error) {
 	return mapped, nil
 }
 
-func (s *RedisService) GetDockerCommandArgs(options map[string]string) []string {
+func (s *DynamoDBService) GetDockerCommandArgs(options map[string]string) []string {
 	return []string{
-		fmt.Sprintf("--publish=%s:6379", options["port"]),
-		fmt.Sprintf("--volume=%s:/data", options["volume"]),
-	}
+		fmt.Sprintf("--publish=%s:8000", options["port"]),
+		fmt.Sprintf("--volume=%s:/data.ms", options["volume"]),
+		"-u root",
+		"jar DynamobDBLocal.jar --sharedDb -dbPath /dynamodb_local_db",
+}
 }

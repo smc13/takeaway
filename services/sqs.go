@@ -7,29 +7,29 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 )
 
-type RedisService struct{}
+type SqsService struct{}
 
-func (s *RedisService) GetName() string {
-	return "Redis"
+func (s *SqsService) GetName() string {
+	return "Sqs"
 }
 
-func (s *RedisService) GetDefaultPort() int {
-	return 6379
+func (s *SqsService) GetDefaultPort() int {
+	return 9324
 }
 
-func (s *RedisService) GetOrganization() string {
-	return ""
+func (s *SqsService) GetOrganization() string {
+	return "roribio16"
 }
 
-func (s *RedisService) GetImageName() string {
-	return "redis"
+func (s *SqsService) GetImageName() string {
+	return "alpine-sqs"
 }
 
-func (s *RedisService) GetDefaults() map[string]string {
+func (s *SqsService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "redis_data",
+		"volume": "sqs_data",
+		"management_port": "9325",
 	}
-
 	// merge base defaults with service defaults
 	for key, value := range DefaultOptions() {
 		values[key] = value
@@ -38,7 +38,7 @@ func (s *RedisService) GetDefaults() map[string]string {
 	return values
 }
 
-func (s *RedisService) Prompt() (map[string]string, error) {
+func (s *SqsService) Prompt() (map[string]string, error) {
 	defaults := s.GetDefaults()
 
 	prompts := []*survey.Question{
@@ -47,7 +47,12 @@ func (s *RedisService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What is the Docker volume name?", Default: defaults["volume"]},
 			Validate: survey.Required,
 		},
-	}
+		{
+			Name:     "management_port",
+			Prompt:   &survey.Input{Message: "What will the management port be?", Default: defaults["management_port"]},
+			Validate: survey.Required,
+		},
+}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 
@@ -66,9 +71,10 @@ func (s *RedisService) Prompt() (map[string]string, error) {
 	return mapped, nil
 }
 
-func (s *RedisService) GetDockerCommandArgs(options map[string]string) []string {
+func (s *SqsService) GetDockerCommandArgs(options map[string]string) []string {
 	return []string{
-		fmt.Sprintf("--publish=%s:6379", options["port"]),
+		fmt.Sprintf("--publish=%s:9324", options["port"]),
 		fmt.Sprintf("--volume=%s:/data", options["volume"]),
+		fmt.Sprintf("--publish=%s:9325", options["management_port"]),
 	}
 }
