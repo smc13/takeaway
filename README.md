@@ -1,10 +1,10 @@
 # Takeaway
 
 ## Overview
-A version of [Tightens Takeout](https://github.com/tightn/takeout) built using Golang.
+A version of [Tightens Takeout](https://github.com/tighten/takeout) built using Golang.
 
 ## Why build this?
-Tightns version is built using PHP and requires PHP to be installed on the machine. It can also be a bit slow to startup.
+Tightens version is built using PHP and requires PHP to be installed on the machine. It can also be a bit slow to startup.
 
 A Golang based version can be compiled into native code so it doesn't require anything else to be installed on the machine and the startup time is greatly reduced.
 
