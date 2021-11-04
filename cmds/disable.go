@@ -66,6 +66,8 @@ var disableCmd = &cobra.Command{
 			for _, arg := range args {
 				disableServiceByName(arg, containers, services)
 			}
+
+			os.Exit(0)
 		}
 
 		selected := showMenu(services)
@@ -153,7 +155,7 @@ func disableServiceById(id string, containers []*docker.Container) {
 func disableServiceByName(name string, containers []*docker.Container, disableableContainers map[string]string) {
 	matches := make(map[string]string)
 	for id, serviceName := range disableableContainers {
-		if serviceName[:len(name)] == name {
+		if len(serviceName) >= len(name) && serviceName[:len(name)] == name {
 			matches[id] = serviceName
 		}
 	}

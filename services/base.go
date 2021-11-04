@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"net"
 	"strconv"
 
@@ -30,7 +31,12 @@ func DefaultPrompts(port int) []*survey.Question {
 			Name:   "port",
 			Prompt: &survey.Input{Message: "Which port would you like to use?", Default: strconv.Itoa(port)},
 			Validate: func(val interface{}) error {
-				if PortIsInUse(val.(string)) {
+				port, err := strconv.ParseUint(val.(string), 10, 16)
+				if err != nil {
+					return errors.New("invalid port")
+				}
+
+				if PortIsInUse(uint16(port)) {
 					return errors.New("port is already in use")
 				}
 
@@ -44,8 +50,8 @@ func DefaultPrompts(port int) []*survey.Question {
 	}
 }
 
-func PortIsInUse(port string) bool {
-	conn, err := net.Dial("tcp", "localhost:"+port)
+func PortIsInUse(port uint16) bool {
+	conn, err := net.Dial("tcp", fmt.Sprintf("localhost:%d", port))
 
 	if err != nil {
 		return false

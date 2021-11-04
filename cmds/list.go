@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
 	"github.com/smcassar/takeaway/docker"
 	"github.com/spf13/cobra"
@@ -51,6 +52,11 @@ var listCmd = &cobra.Command{
 
 			fmt.Println(string(out))
 			return
+		}
+
+		if len(containers) == 0 {
+			color.Yellow("No services enabled by Takeaway")
+			os.Exit(0)
 		}
 
 		fmt.Println("")

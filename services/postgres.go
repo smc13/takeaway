@@ -18,7 +18,7 @@ func (s *PostgresService) GetDefaultPort() int {
 }
 
 func (s *PostgresService) GetOrganization() string {
-	return "postgres"
+	return ""
 }
 
 func (s *PostgresService) GetImageName() string {

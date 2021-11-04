@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/fatih/color"
@@ -86,14 +87,21 @@ func EnableService(service Service, useDefaults bool) {
 		return
 	}
 
-	tag, err := docker.ResolveTag(service.GetOrganization(), service.GetImageName(), options["tag"])
+	organization := service.GetOrganization()
+	if organization == "" {
+		organization = "library"
+	}
+
+	tag, err := docker.ResolveTag(organization, service.GetImageName(), options["tag"])
 	if err != nil {
 		color.Red("Error while resolving tag: %s", err)
 		return
 	}
 
+	imgName := docker.BuildImageName(organization, service.GetImageName(), tag)
+
 	// ensure the image is downloaded
-	imageErr := ensureImageIsDownloaded(service, tag)
+	imageErr := ensureImageIsDownloaded(imgName)
 	if imageErr != nil {
 		color.Red("Error while downloading image: %s", imageErr)
 		return
@@ -104,7 +112,13 @@ func EnableService(service Service, useDefaults bool) {
 	dockerTemplate := service.GetDockerCommandArgs(options)
 
 	// check that the port is not already in use
-	if PortIsInUse(options["port"]) {
+	port, err := strconv.ParseUint(options["port"], 10, 16)
+	if err != nil {
+		color.Red("invalid port")
+		return
+	}
+
+	if PortIsInUse(uint16(port)) {
 		color.Red("Port %s is already in use", options["port"])
 		return
 	}
@@ -113,7 +127,7 @@ func EnableService(service Service, useDefaults bool) {
 
 	args := append([]string{fmt.Sprintf("--name=%s", getContainerName(service.GetName(), tag, options["port"]))}, docker.GetNetworkSettings(alias, service.GetImageName())...)
 	args = append(args, dockerTemplate...)
-	args = append(args, buildImageName(service, tag))
+	args = append(args, docker.BuildImageName(organization, service.GetImageName(), tag))
 
 	err = docker.CreateContainer(args)
 	if err != nil {
@@ -129,15 +143,6 @@ func getContainerName(serviceName string, tag string, port string) string {
 	return fmt.Sprintf("TO--%s--%s--%s", strings.ToLower(serviceName), tag, port)
 }
 
-func buildImageName(service Service, tag string) string {
-	organization := service.GetOrganization()
-	if organization == "" {
-		organization = "library"
-	}
-
-	return fmt.Sprintf("%s/%s:%s", organization, service.GetImageName(), tag)
-}
-
 // Generate an alias based on the service name & tag
 func getAlias(serviceName string, tag string) string {
 	shortName := strings.ToLower(serviceName)
@@ -150,17 +155,17 @@ func getAlias(serviceName string, tag string) string {
 }
 
 // Ensure that the services image is downloaded
-func ensureImageIsDownloaded(service Service, tag string) error {
-	if !docker.ImageExists(service.GetOrganization(), service.GetImageName(), tag) {
-		color.Yellow("Downloading %s/%s:%s...", service.GetOrganization(), service.GetImageName(), tag)
+func ensureImageIsDownloaded(imgName string) error {
+	if !docker.ImageExists(imgName) {
+		color.Yellow("Downloading docker image %s...", imgName)
 
-		err := docker.PullImage(service.GetOrganization(), service.GetImageName(), tag)
+		err := docker.PullImage(imgName)
 
 		if err != nil {
 			return err
 		}
 
-		color.Green("✔ %s/%s:%s downloaded", service.GetOrganization(), service.GetImageName(), tag)
+		color.Green("✔ Image \"%s\" downloaded", imgName)
 	}
 
 	return nil

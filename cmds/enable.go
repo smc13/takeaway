@@ -42,15 +42,18 @@ var enableCmd = &cobra.Command{
 			os.Exit(0)
 		}
 
-		var selected []string
-		survey.AskOne(&survey.MultiSelect{
+		var selected string
+		survey.AskOne(&survey.Select{
 			Message: "Select services to enable:",
 			Options: services.GetServiceNames(),
 		}, &selected, survey.WithPageSize(20), SelectIcons)
 
-		for _, name := range selected {
-			enableService(name)
+		if len(selected) == 0 {
+			color.Red("No services selected")
+			os.Exit(0)
 		}
+
+		enableService(selected)
 
 		os.Exit(0)
 	},
