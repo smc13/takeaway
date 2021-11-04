@@ -27,7 +27,7 @@ func (s *RabbitMqService) GetImageName() string {
 
 func (s *RabbitMqService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"hostname": "takeout",
+		"hostname":  "takeout",
 		"mgmt_port": "15672",
 	}
 	// merge base defaults with service defaults

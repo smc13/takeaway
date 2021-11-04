@@ -27,7 +27,7 @@ func (s *PostGisService) GetImageName() string {
 
 func (s *PostGisService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "postgis_data",
+		"volume":        "postgis_data",
 		"root_password": "password",
 	}
 	// merge base defaults with service defaults
@@ -52,7 +52,7 @@ func (s *PostGisService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What will the password for the `postgres` user be?", Default: defaults["root_password"]},
 			Validate: survey.Required,
 		},
-}
+	}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 

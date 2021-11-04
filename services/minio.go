@@ -27,9 +27,9 @@ func (s *MinioService) GetImageName() string {
 
 func (s *MinioService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "minio_data",
-		"console": "9001",
-		"root_user": "minioadmin",
+		"volume":        "minio_data",
+		"console":       "9001",
+		"root_user":     "minioadmin",
 		"root_password": "minioadmin",
 	}
 	// merge base defaults with service defaults
@@ -64,7 +64,7 @@ func (s *MinioService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What will the root password for Minio be?", Default: defaults["root_password"]},
 			Validate: survey.Required,
 		},
-}
+	}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 

@@ -21,9 +21,9 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use: "takeaway",
+	Use:   "takeaway",
 	Short: "Quickly enable a docker service",
-	Long: `A Golang based implementation of Tightens Takeout.`,
+	Long:  `A Golang based implementation of Tightens Takeout.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },

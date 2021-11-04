@@ -27,9 +27,9 @@ func (s *SingleStoreService) GetImageName() string {
 
 func (s *SingleStoreService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "singlestore_data",
-		"http_port": "8080",
-		"license": "",
+		"volume":        "singlestore_data",
+		"http_port":     "8080",
+		"license":       "",
 		"root_password": "password",
 	}
 	// merge base defaults with service defaults
@@ -64,7 +64,7 @@ func (s *SingleStoreService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What will the root password be?", Default: defaults["root_password"]},
 			Validate: survey.Required,
 		},
-}
+	}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 

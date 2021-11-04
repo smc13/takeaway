@@ -46,7 +46,7 @@ func (s *MsSqlService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What wil the password for the `sa` user be?", Default: defaults["sa_password"]},
 			Validate: survey.Required,
 		},
-}
+	}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 

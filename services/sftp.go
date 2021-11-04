@@ -28,8 +28,8 @@ func (s *SftpService) GetImageName() string {
 
 func (s *SftpService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"user_name": "foo",
-		"password": "pass",
+		"user_name":        "foo",
+		"password":         "pass",
 		"upload_directory": "upload",
 		"mapped_directory": "",
 	}
@@ -66,10 +66,10 @@ func (s *SftpService) Prompt() (map[string]string, error) {
 			Validate: survey.Required,
 		},
 		{
-			Name:     "mapped_directory",
-			Prompt:   &survey.Input{Message: "Which local directory should be mapped inside? (nothing if null)", Default: defaults["mapped_directory"]},
+			Name:   "mapped_directory",
+			Prompt: &survey.Input{Message: "Which local directory should be mapped inside? (nothing if null)", Default: defaults["mapped_directory"]},
 		},
-}
+	}
 
 	var answers = make(map[string]interface{})
 	err := survey.Ask(prompts, &answers)

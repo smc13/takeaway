@@ -27,7 +27,7 @@ func (s *SqsService) GetImageName() string {
 
 func (s *SqsService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "sqs_data",
+		"volume":          "sqs_data",
 		"management_port": "9325",
 	}
 	// merge base defaults with service defaults
@@ -52,7 +52,7 @@ func (s *SqsService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What will the management port be?", Default: defaults["management_port"]},
 			Validate: survey.Required,
 		},
-}
+	}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 

@@ -20,9 +20,9 @@ import (
 	"os"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/fatih/color"
 	"github.com/smcassar/takeaway/docker"
 	"github.com/spf13/cobra"
-	"github.com/fatih/color"
 )
 
 var startAll bool
@@ -31,8 +31,8 @@ var startAll bool
 var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start a stopped container",
-	Long: ``,
-	Args: cobra.ArbitraryArgs,
+	Long:  ``,
+	Args:  cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		containers, err := docker.StartableTakawayContainers()
 		if err != nil {
@@ -41,7 +41,7 @@ var startCmd = &cobra.Command{
 		}
 
 		if len(args) > 0 {
-		  found := 0
+			found := 0
 			for _, arg := range args {
 				// find container by name or id
 				container := docker.FindContainer(arg, containers)
@@ -57,7 +57,7 @@ var startCmd = &cobra.Command{
 			os.Exit(0)
 		}
 
-		if (startAll) {
+		if startAll {
 			for _, container := range containers {
 				startContainer(container)
 			}

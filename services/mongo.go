@@ -27,8 +27,8 @@ func (s *MongoService) GetImageName() string {
 
 func (s *MongoService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "mongo_data",
-		"root_user": "admin",
+		"volume":        "mongo_data",
+		"root_user":     "admin",
 		"root_password": "password",
 	}
 	// merge base defaults with service defaults
@@ -58,7 +58,7 @@ func (s *MongoService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What will the root password be?", Default: defaults["root_password"]},
 			Validate: survey.Required,
 		},
-}
+	}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 

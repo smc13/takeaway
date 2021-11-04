@@ -27,7 +27,7 @@ func (s *MySqlService) GetImageName() string {
 
 func (s *MySqlService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "mysql_data",
+		"volume":        "mysql_data",
 		"root_password": "",
 	}
 	// merge base defaults with service defaults
@@ -48,10 +48,10 @@ func (s *MySqlService) Prompt() (map[string]string, error) {
 			Validate: survey.Required,
 		},
 		{
-			Name:     "root_password",
-			Prompt:   &survey.Input{Message: "What will the root password be? (null by default)", Default: defaults["root_password"]},
+			Name:   "root_password",
+			Prompt: &survey.Input{Message: "What will the root password be? (null by default)", Default: defaults["root_password"]},
 		},
-}
+	}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 

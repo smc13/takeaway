@@ -46,7 +46,7 @@ func (s *DynamoDBService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What is the Docker volume name?", Default: defaults["volume"]},
 			Validate: survey.Required,
 		},
-}
+	}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 
@@ -71,5 +71,5 @@ func (s *DynamoDBService) GetDockerCommandArgs(options map[string]string) []stri
 		fmt.Sprintf("--volume=%s:/data.ms", options["volume"]),
 		"-u root",
 		"jar DynamobDBLocal.jar --sharedDb -dbPath /dynamodb_local_db",
-}
+	}
 }

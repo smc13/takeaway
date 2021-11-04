@@ -27,7 +27,7 @@ func (s *Neo4jService) GetImageName() string {
 
 func (s *Neo4jService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "neo4j_data",
+		"volume":           "neo4j_data",
 		"bolt_access_port": "7687",
 	}
 	// merge base defaults with service defaults

@@ -47,7 +47,7 @@ func (s *ElasticSearchService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What is the Docker volume name?", Default: defaults["volume"]},
 			Validate: survey.Required,
 		},
-}
+	}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 

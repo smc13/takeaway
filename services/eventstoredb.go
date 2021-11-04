@@ -27,7 +27,7 @@ func (s *EventStoreDbService) GetImageName() string {
 
 func (s *EventStoreDbService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "eventstoredb_data",
+		"volume":   "eventstoredb_data",
 		"web_port": "2113",
 	}
 	// merge base defaults with service defaults
@@ -57,7 +57,7 @@ func (s *EventStoreDbService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What will the web port be?", Default: defaults["web_port"]},
 			Validate: survey.Required,
 		},
-}
+	}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 

@@ -27,8 +27,8 @@ func (s *InfluxDBService) GetImageName() string {
 
 func (s *InfluxDBService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"volume": "influxdb_data",
-		"admin_user": "admin",
+		"volume":         "influxdb_data",
+		"admin_user":     "admin",
 		"admin_password": "password",
 	}
 	// merge base defaults with service defaults
@@ -58,7 +58,7 @@ func (s *InfluxDBService) Prompt() (map[string]string, error) {
 			Prompt:   &survey.Input{Message: "What will the admin password be?", Default: defaults["admin_password"]},
 			Validate: survey.Required,
 		},
-}
+	}
 
 	prompts = append(DefaultPrompts(s.GetDefaultPort()), prompts...)
 
