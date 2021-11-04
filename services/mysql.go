@@ -50,7 +50,6 @@ func (s *MySqlService) Prompt() (map[string]string, error) {
 		{
 			Name:     "root_password",
 			Prompt:   &survey.Input{Message: "What will the root password be? (null by default)", Default: defaults["root_password"]},
-			Validate: survey.Required,
 		},
 }
 

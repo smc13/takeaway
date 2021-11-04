@@ -68,7 +68,6 @@ func (s *SftpService) Prompt() (map[string]string, error) {
 		{
 			Name:     "mapped_directory",
 			Prompt:   &survey.Input{Message: "Which local directory should be mapped inside? (nothing if null)", Default: defaults["mapped_directory"]},
-			Validate: survey.Required,
 		},
 }
 
