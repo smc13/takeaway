@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -40,6 +41,10 @@ var services = []Service{
 
 // Get all available services
 func GetServices() []Service {
+	sort.Slice(services, func(i, j int) bool {
+		return services[i].GetName() < services[j].GetName()
+	})
+
 	return services
 }
 
