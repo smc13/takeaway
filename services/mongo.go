@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *MongoService) GetImageName() string {
 func (s *MongoService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume":        "mongo_data",
+		"port":          strconv.Itoa(s.GetDefaultPort()),
 		"root_user":     "admin",
 		"root_password": "password",
 	}
@@ -81,7 +83,9 @@ func (s *MongoService) GetDockerCommandArgs(options map[string]string) []string 
 	return []string{
 		fmt.Sprintf("--publish=%s:27017", options["port"]),
 		fmt.Sprintf("--volume=%s:/data/db", options["volume"]),
-		fmt.Sprintf("--env=MONGO_INITDB_ROOT_USERNAME=%s", options["root_user"]),
-		fmt.Sprintf("--env=MONGO_INITDB_ROOT_PASSWORD=%s", options["root_password"]),
+		"-e",
+		fmt.Sprintf("MONGO_INITDB_ROOT_USERNAME=%s", options["root_user"]),
+		"-e",
+		fmt.Sprintf("MONGO_INITDB_ROOT_PASSWORD=%s", options["root_password"]),
 	}
 }

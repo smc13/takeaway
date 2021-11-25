@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *SqsService) GetImageName() string {
 func (s *SqsService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume":          "sqs_data",
+		"port":            strconv.Itoa(s.GetDefaultPort()),
 		"management_port": "9325",
 	}
 	// merge base defaults with service defaults

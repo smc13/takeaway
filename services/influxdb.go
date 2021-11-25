@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *InfluxDBService) GetImageName() string {
 func (s *InfluxDBService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume":         "influxdb_data",
+		"port":           strconv.Itoa(s.GetDefaultPort()),
 		"admin_user":     "admin",
 		"admin_password": "password",
 	}
@@ -81,7 +83,9 @@ func (s *InfluxDBService) GetDockerCommandArgs(options map[string]string) []stri
 	return []string{
 		fmt.Sprintf("--publish=%s:8086", options["port"]),
 		fmt.Sprintf("--volume=%s:/var/lib/influxdb", options["volume"]),
-		fmt.Sprintf("--env=INFLUXDB_ADMIN_USER=%s", options["admin_user"]),
-		fmt.Sprintf("--env=INFLUXDB_ADMIN_PASSWORD=%s", options["admin_password"]),
+		"-e",
+		fmt.Sprintf("INFLUXDB_ADMIN_USER=%s", options["admin_user"]),
+		"-e",
+		fmt.Sprintf("INFLUXDB_ADMIN_PASSWORD=%s", options["admin_password"]),
 	}
 }

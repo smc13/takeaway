@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *ElasticSearchService) GetImageName() string {
 func (s *ElasticSearchService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume": "elastic_data",
+		"port":   strconv.Itoa(s.GetDefaultPort()),
 	}
 
 	// merge base defaults with service defaults
@@ -70,6 +72,7 @@ func (s *ElasticSearchService) GetDockerCommandArgs(options map[string]string) [
 	return []string{
 		fmt.Sprintf("--publish=%s:9200", options["port"]),
 		fmt.Sprintf("--volume=%s:/usr/share/elasticsearch/data", options["volume"]),
-		"--env=discovery.type=single-node",
+		"-e",
+		"discovery.type=single-node",
 	}
 }

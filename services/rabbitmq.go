@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -27,6 +28,7 @@ func (s *RabbitMqService) GetImageName() string {
 
 func (s *RabbitMqService) GetDefaults() map[string]string {
 	values := map[string]string{
+		"port":      strconv.Itoa(s.GetDefaultPort()),
 		"hostname":  "takeout",
 		"mgmt_port": "15672",
 	}

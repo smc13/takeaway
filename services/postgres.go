@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *PostgresService) GetImageName() string {
 func (s *PostgresService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume":   "postgres_data",
+		"port":     strconv.Itoa(s.GetDefaultPort()),
 		"password": "password",
 	}
 
@@ -76,6 +78,7 @@ func (s *PostgresService) GetDockerCommandArgs(options map[string]string) []stri
 	return []string{
 		fmt.Sprintf("--publish=%s:5432", options["port"]),
 		fmt.Sprintf("--volume=%s:/var/lib/postgresql/data", options["volume"]),
-		fmt.Sprintf("--env=\"POSTGRES_PASSWORD=%s\"", options["password"]),
+		"-e",
+		fmt.Sprintf("\"POSTGRES_PASSWORD=%s\"", options["password"]),
 	}
 }

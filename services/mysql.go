@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -29,6 +30,7 @@ func (s *MySqlService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume":        "mysql_data",
 		"root_password": "",
+		"port":          strconv.Itoa(s.GetDefaultPort()),
 	}
 	// merge base defaults with service defaults
 	for key, value := range DefaultOptions() {
@@ -79,7 +81,9 @@ func (s *MySqlService) GetDockerCommandArgs(options map[string]string) []string 
 	return []string{
 		fmt.Sprintf("--publish=%s:3306", options["port"]),
 		fmt.Sprintf("--volume=%s:/var/lib/mysql", options["volume"]),
-		fmt.Sprintf("--env=MYSQL_ROOT_PASSWORD=%s", options["root_password"]),
-		fmt.Sprintf("--env=MYSQL_ALLOW_EMPTY_PASSWORD=%s", allowEmptyPassword),
+		"-e",
+		fmt.Sprintf("MYSQL_ROOT_PASSWORD=%s", options["root_password"]),
+		"-e",
+		fmt.Sprintf("MYSQL_ALLOW_EMPTY_PASSWORD=%s", allowEmptyPassword),
 	}
 }

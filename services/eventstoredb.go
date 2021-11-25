@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *EventStoreDbService) GetImageName() string {
 func (s *EventStoreDbService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume":   "eventstoredb_data",
+		"port":     strconv.Itoa(s.GetDefaultPort()),
 		"web_port": "2113",
 	}
 	// merge base defaults with service defaults

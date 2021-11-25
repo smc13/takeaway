@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -27,6 +28,7 @@ func (s *MailHogService) GetImageName() string {
 
 func (s *MailHogService) GetDefaults() map[string]string {
 	values := map[string]string{
+		"port":     strconv.Itoa(s.GetDefaultPort()),
 		"web_port": "8025",
 	}
 

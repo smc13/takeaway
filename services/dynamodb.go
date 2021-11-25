@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *DynamoDBService) GetImageName() string {
 func (s *DynamoDBService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume": "dynamodb_data",
+		"port":   strconv.Itoa(s.GetDefaultPort()),
 	}
 	// merge base defaults with service defaults
 	for key, value := range DefaultOptions() {

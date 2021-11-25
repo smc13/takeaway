@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *SingleStoreService) GetImageName() string {
 func (s *SingleStoreService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume":        "singlestore_data",
+		"port":          strconv.Itoa(s.GetDefaultPort()),
 		"http_port":     "8080",
 		"license":       "",
 		"root_password": "password",
@@ -88,7 +90,9 @@ func (s *SingleStoreService) GetDockerCommandArgs(options map[string]string) []s
 		fmt.Sprintf("--publish=%s:3306", options["port"]),
 		fmt.Sprintf("--volume=%s:/var/lib/memsql", options["volume"]),
 		fmt.Sprintf("--publish=%s:8080", options["http_port"]),
-		fmt.Sprintf("--env=LICENSE_KEY=%s", options["license"]),
-		fmt.Sprintf("--env=ROOT_PASSWORD=%s", options["root_password"]),
+		"-e",
+		fmt.Sprintf("LICENSE_KEY=%s", options["license"]),
+		"-e",
+		fmt.Sprintf("ROOT_PASSWORD=%s", options["root_password"]),
 	}
 }

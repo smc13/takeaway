@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *Neo4jService) GetImageName() string {
 func (s *Neo4jService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume":           "neo4j_data",
+		"port":             strconv.Itoa(s.GetDefaultPort()),
 		"bolt_access_port": "7687",
 	}
 	// merge base defaults with service defaults
@@ -76,7 +78,9 @@ func (s *Neo4jService) GetDockerCommandArgs(options map[string]string) []string 
 		fmt.Sprintf("--publish=%s:7474", options["port"]),
 		fmt.Sprintf("--volume=%s:/data", options["volume"]),
 		fmt.Sprintf("--publish=%s:7687", options["bolt_access_port"]),
-		"--env=NEO4J_AUTH=none",
-		"--env=NEO4J_ACCEPT_LICENSE_AGREEMENT=yes",
+		"-e",
+		"NEO4J_AUTH=none",
+		"-e",
+		"NEO4J_ACCEPT_LICENSE_AGREEMENT=yes",
 	}
 }

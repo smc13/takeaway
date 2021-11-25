@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *PostGisService) GetImageName() string {
 func (s *PostGisService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume":        "postgis_data",
+		"port":          strconv.Itoa(s.GetDefaultPort()),
 		"root_password": "password",
 	}
 	// merge base defaults with service defaults
@@ -75,6 +77,7 @@ func (s *PostGisService) GetDockerCommandArgs(options map[string]string) []strin
 	return []string{
 		fmt.Sprintf("--publish=%s:5432", options["port"]),
 		fmt.Sprintf("--volume=%s:/var/lib/postgis/data", options["volume"]),
-		fmt.Sprintf("--env=POSTGRES_PASSWORD=%s", options["root_password"]),
+		"-e",
+		fmt.Sprintf("POSTGRES_PASSWORD=%s", options["root_password"]),
 	}
 }

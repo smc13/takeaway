@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -27,6 +28,7 @@ func (s *MsSqlService) GetImageName() string {
 
 func (s *MsSqlService) GetDefaults() map[string]string {
 	values := map[string]string{
+		"port":        strconv.Itoa(s.GetDefaultPort()),
 		"sa_password": "useA$strongPas1337",
 	}
 	// merge base defaults with service defaults
@@ -68,7 +70,9 @@ func (s *MsSqlService) Prompt() (map[string]string, error) {
 func (s *MsSqlService) GetDockerCommandArgs(options map[string]string) []string {
 	return []string{
 		fmt.Sprintf("--publish=%s:1433", options["port"]),
-		"--env=ACCEPT_EULA=Y",
-		fmt.Sprintf("--env=SA_PASSWORD=%s", options["sa_password"]),
+		"-e",
+		"ACCEPT_EULA=Y",
+		"-e",
+		fmt.Sprintf("SA_PASSWORD=%s", options["sa_password"]),
 	}
 }

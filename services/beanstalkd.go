@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -27,7 +28,7 @@ func (s *BeanstalkdService) GetDefaultPort() int {
 
 func (s *BeanstalkdService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"port": "6379",
+		"port": strconv.Itoa(s.GetDefaultPort()),
 	}
 
 	// merge base defaults with service defaults

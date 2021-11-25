@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -27,8 +28,9 @@ func (s *ExposeService) GetImageName() string {
 
 func (s *ExposeService) GetDefaults() map[string]string {
 	values := map[string]string{
-		"domain":   "example.com",
 		"volume":   "expose_data",
+		"port":     strconv.Itoa(s.GetDefaultPort()),
+		"domain":   "example.com",
 		"username": "admin",
 		"password": "password",
 	}
@@ -88,8 +90,11 @@ func (s *ExposeService) GetDockerCommandArgs(options map[string]string) []string
 	return []string{
 		fmt.Sprintf("--publish=%s:8080", options["port"]),
 		fmt.Sprintf("--volume=%s:/root/.express", options["volume"]),
-		fmt.Sprintf("--env=\"username=%s\"", options["username"]),
-		fmt.Sprintf("--env=\"password=%s\"", options["password"]),
-		fmt.Sprintf("--env=\"domain=%s\"", options["domain"]),
+		"-e",
+		fmt.Sprintf("\"username=%s\"", options["username"]),
+		"-e",
+		fmt.Sprintf("\"password=%s\"", options["password"]),
+		"-e",
+		fmt.Sprintf("\"domain=%s\"", options["domain"]),
 	}
 }

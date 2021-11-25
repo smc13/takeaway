@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *MinioService) GetImageName() string {
 func (s *MinioService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume":        "minio_data",
+		"port":          strconv.Itoa(s.GetDefaultPort()),
 		"console":       "9001",
 		"root_user":     "minioadmin",
 		"root_password": "minioadmin",
@@ -88,7 +90,9 @@ func (s *MinioService) GetDockerCommandArgs(options map[string]string) []string 
 		fmt.Sprintf("--publish=%s:9000", options["port"]),
 		fmt.Sprintf("--volume=%s:/data", options["volume"]),
 		fmt.Sprintf("--publish=%s:9001", options["console"]),
-		fmt.Sprintf("--env=MINIO_ROOT_USER=%s", options["root_user"]),
-		fmt.Sprintf("--env=MINIO_ROOT_PASSWORD=%s", options["root_password"]),
+		"-e",
+		fmt.Sprintf("MINIO_ROOT_USER=%s", options["root_user"]),
+		"-e",
+		fmt.Sprintf("MINIO_ROOT_PASSWORD=%s", options["root_password"]),
 	}
 }

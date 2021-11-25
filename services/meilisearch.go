@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *MeiliSearchService) GetImageName() string {
 func (s *MeiliSearchService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume": "meili_data",
+		"port":   strconv.Itoa(s.GetDefaultPort()),
 	}
 
 	// merge base defaults with service defaults

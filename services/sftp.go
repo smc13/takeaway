@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -28,6 +29,7 @@ func (s *SftpService) GetImageName() string {
 
 func (s *SftpService) GetDefaults() map[string]string {
 	values := map[string]string{
+		"port":             strconv.Itoa(s.GetDefaultPort()),
 		"user_name":        "foo",
 		"password":         "pass",
 		"upload_directory": "upload",

@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -27,6 +28,7 @@ func (s *ClickHouseService) GetImageName() string {
 
 func (s *ClickHouseService) GetDefaults() map[string]string {
 	values := map[string]string{
+		"port":      strconv.Itoa(s.GetDefaultPort()),
 		"http_port": "8123",
 		"volume":    "clickhouse_data",
 	}

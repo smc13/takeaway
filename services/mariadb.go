@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -29,6 +30,7 @@ func (s *MariaDBService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume":        "mariadb_data",
 		"root_password": "password",
+		"port":          strconv.Itoa(s.GetDefaultPort()),
 	}
 	// merge base defaults with service defaults
 	for key, value := range DefaultOptions() {
@@ -75,6 +77,7 @@ func (s *MariaDBService) GetDockerCommandArgs(options map[string]string) []strin
 	return []string{
 		fmt.Sprintf("--publish=%s:3306", options["port"]),
 		fmt.Sprintf("--volume=%s:/var/lib/mysql", options["volume"]),
-		fmt.Sprintf("--env=MYSQL_ROOT_PASSWORD=%s", options["password"]),
+		"-e",
+		fmt.Sprintf("MYSQL_ROOT_PASSWORD=%s", options["root_password"]),
 	}
 }

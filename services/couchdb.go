@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/AlecAivazis/survey/v2"
 )
@@ -28,6 +29,7 @@ func (s *CouchDbService) GetImageName() string {
 func (s *CouchDbService) GetDefaults() map[string]string {
 	values := map[string]string{
 		"volume": "couchdb_data",
+		"port":   strconv.Itoa(s.GetDefaultPort()),
 	}
 
 	// merge base defaults with service defaults
